@@ -96,7 +96,7 @@ def train_sft():
         return {"text": text}
 
     print("Loading SFT dataset...")
-    dataset = load_dataset("mlabonne/FineTome-100k", split="train[:100]")
+    dataset = load_dataset("mlabonne/FineTome-100k", split="train[:100000]")
     dataset = dataset.map(apply_template, batched=True)
 
     trainer = SFTTrainer(
@@ -323,7 +323,7 @@ if __name__ == "__main__":
     test_prompts = generate_test_prompts()
     sft_model, tokenizer = train_sft()
     responses_before_dpo = test_model(sft_model, tokenizer, test_prompts)
-    final_model = train_dynamic_dpo(sft_model, tokenizer, num_iterations=10)
+    final_model = train_dynamic_dpo(sft_model, tokenizer, num_iterations=1000)
     responses_after_dpo = test_model(final_model, tokenizer, test_prompts)
 
     with open("test_results.txt", "w") as file:
